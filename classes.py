@@ -11,7 +11,7 @@ class Countdown:
         for i in range(1, self.count + 1):
             sp.append(self.timer(i))
         await asyncio.gather(*sp)
-        print(self.name + 'ok')
+        print(self.name + ' ok')
 
     async def timer(self, n):
         await asyncio.sleep(n)

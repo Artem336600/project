@@ -1,39 +1,31 @@
-import aiohttp
-import asyncio
+class Economy:
+    def __init__(self, money, money_cost, goods, extra_money):
+        self.money = money
+        self.money_cost = money_cost
+        self.goods = goods
+        self.extra_money = extra_money
 
-asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-url = 'https://api.thecatapi.com/v1/images/search?limit=10'
+    def more_money(self, n):
+        self.money_cost = (self.money / (self.money + n))
+        return f'цена денег теперь {self.money_cost} от изначальной стоимости'
 
+    def eat(self, n):
+        self.goods = (self.goods - n)
+        return f'На складах осталось {self.goods} товаров'
 
-async def download(session, url, n):
-    print(f'cat{n} start download')
-    response = await session.get(url)
-    response_bytes = await response.read()
-
-    with open(f'cats/cat{n}{url[-4:]}', 'wb') as file:
-        file.write(response_bytes)
-    print(f'cat{n} done!')
-
-
-async def main():
-
-    async with aiohttp.ClientSession() as session:
-        response = await session.get(url)
-        response_json = await response.json()
-
-        url_cats = []
-        for data in response_json:
-            url_cats.append(data['url'])
-
-        tasks = []
-        for i in range(10):
-            tasks.append(download(session, url_cats[i], i))
-        await asyncio.gather(*tasks)
-
-        response.release()
-
-def sync_main():
-    asyncio.run(main())
+    def factories(self, n):
+        self.goods = (self.goods + n * 10)
+        return f'Фабрики поработали и на складах осталось {self.goods} товаров'
 
 
-sync_main()
+def main():
+    money, money_cost, factory, extra_money = 1000, 1, 2, 0
+    cd = Economy(money, money_cost, factory, extra_money)
+    for i in range(20):
+        extra_money = int(input('Сколько Денег вы хотите напечатать?'))
+        print(cd.more_money(extra_money))
+        print(cd.eat(5))
+        print(cd.factories(factory))
+
+
+main()
