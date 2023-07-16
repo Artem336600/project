@@ -5,6 +5,7 @@ from aiogram import Bot, Dispatcher, executor, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
 from keyboards import *
+from bot_text import *
 
 bot = Bot(Token)
 dp = Dispatcher(bot, storage=MemoryStorage())
@@ -12,68 +13,36 @@ storage = MemoryStorage()
 
 
 def print_data(my_dict):
-    economy_status = (
-        f'📆 ДЕНЬ НОМЕР {my_dict["date"]} \n \n'
-        f'👨‍👩‍👧‍👦 ПАРАМЕТРЫ НАСЕЛЕНИЯ: \n'
-        f'Мирных жителей в вашей стране: {int(my_dict["population"])} \n '
-        f'Прирост населения за 10 дней: {format(my_dict["pop_growth"], "6g")} \n \n'
-        f'🪖 ПАРАМЕТРЫ АРМИИ: \n'
-        f'Солдат в вашей армии: {int(my_dict["sold"])} \n тренирующихся рекрутов(призываются каждые 10 дней): '
-        f'{int(my_dict["cons"])} \n процент призыва: {format(my_dict["cons_per"], "6g")} \n '
-        f'готовых призывников: {int(my_dict["ready_cons"])} \n '
-        f'снаряжения для солдат на складах: {int(my_dict["outfit"])} \n '
-        f'стоимость снаряжения: {format(my_dict["outfit_cost"], "6g")} \n \n'
-        f'📉📈 ПАРАМЕТРЫ ЭКОНОМИКИ: \n'
-        f'Курс валюты: {format(my_dict["money_cost"], "6g")} \n'
-        f'Денег у вас в казне: {int(my_dict["money"])} \n '
-        f'топлива в запасах: {int(my_dict["fuel"])} \n '
-        f'производство топлива в день: {format(my_dict["fuel_produce"], "6g")} \n стоимость топлива: '
-        f'{format(my_dict["fuel_cost"], "6g")} \n'
-        f'  Продуктов на складах: {int(my_dict["products"])} \n '
-        f'Производство продуктов в день: {format(my_dict["products_produce"], "6g")} \n'
-        f' Стоимость продуктов: {format(my_dict["products_cost"], "6g")} \n '
-        f'Напечатано денег за всё время: {int(my_dict["more_money"])} \n'
-        f' фабрики, производящие товары народного потребления: {int(my_dict["products_factory"])} \n'
-        f' Заводы по переработке топлива:{int(my_dict["fuel_factory"])}')
+    economy_status = (parametrs[0] + str(my_dict["date"]) + '\n \n' + parametrs[1] + '\n' + parametrs[2] +
+                      str(my_dict['population']) + '\n' + parametrs[3] + str(my_dict['pop_growth']) + '\n \n' +
+                      parametrs[4] + '\n' + parametrs[5] + str(my_dict['sold']) + '\n' + parametrs[6] +
+                      str(my_dict['ready_cons']) + '\n' + parametrs[7] + str(my_dict['cons']) + '\n' +
+                      parametrs[8] + str(my_dict['cons_per']) + '\n' + parametrs[9] + str(my_dict['outfit']) +
+                      '\n' + parametrs[10] + str(my_dict['outfit_cost']) + '\n \n' + parametrs[11] + '\n' +
+                      parametrs[12] + str(my_dict['money']) + '\n' + parametrs[13] + str(my_dict['min_money']) + '\n' +
+                      parametrs[14] + str(my_dict['money_cost']) + '\n' + parametrs[15] + str(my_dict['more_money'])
+                      + '\n' + parametrs[16] + str(my_dict['fuel']) + '\n' + parametrs[17] +
+                      str(my_dict['fuel_factory']) + '\n' + parametrs[18] + str(my_dict['fuel_produce']) + '\n' +
+                      parametrs[19] + str(my_dict['fuel_cost']) + '\n' + parametrs[20] + str(my_dict['products']) +
+                      '\n' + parametrs[21] + str(my_dict['products_factory']) + '\n' + parametrs[22] +
+                      str(my_dict['products_produce']) + '\n' + parametrs[23] + str(my_dict['products_cost']))
     return economy_status
 
 
 @dp.message_handler(commands='start', state='*')
 async def start_handler(message: types.Message, state):
-    await state.update_data(population_b=100000, population=100000, pop_growth=1.1, sold=100, cons=20,
-                            cons_per=0.01, ready_cons=5, outfit=8000,
-                            outfit_cost=5, fuel=10000, fuel_produce=100000, fuel_cost=3, money=10000,
-                            money_cost=1, products=150000, products_produce=200000,
-                            products_cost=3, fuel_factory=10, products_factory=20, more_money=0, date=1,
-                            Kafuron_f_fact=100, Kafuron_w=0,
-                            Kafuron_p_fact=100, Kafuron_m=100000, Klalkriya_f_fact=70, Klalkriya_p_fact=60,
-                            Klalkriya_m=50000, Klalkriya_w=0,
-                            Keliktaniya_f_fact=20, Keliktaniya_p_fact=10, Keliktaniya_m=10000, Keliktaniya_w=0, w=0,
-                            f=0)
+    await state.update_data(date=1,
+                            population=100000, pop_growth=1.1,
+                            sold=100, ready_cons=5, cons=20, cons_per=0.01, outfit=8000, outfit_cost=5,
+                            money=10000, min_money=501250, money_cost=1, more_money=0, fuel=10000, fuel_factory=10,
+                            fuel_produce=100000, fuel_cost=3, products=150000, products_factory=20,
+                            products_produce=200000, products_cost=3,
+                            Kafuron_f_fact=100, Kafuron_w=0, Kafuron_p_fact=100, Kafuron_m=100000, Klalkriya_f_fact=70,
+                            Klalkriya_p_fact=60, Klalkriya_m=50000, Klalkriya_w=0, Keliktaniya_f_fact=20,
+                            Keliktaniya_p_fact=10, Keliktaniya_m=10000, Keliktaniya_w=0, w=0, f=0, population_b=100000)
     with open('images/ancient_text.jpg', 'rb') as img:
         await message.answer_photo(img)
-    await message.answer(
-        'Эта история как и многие другие начинается с великой войны, но прежде мы расскажем вам о том, что было до неё.'
-        'Много веков назад существовало лишь одно государство, занимавшее все континенты.  Эту страну населяли '
-        'множество расс: милиоремы - изобретатели и торговцы, которые снабжали всю империю технологиями, '
-        'астутианы - грабители и  мелкие торговцы, которые заботятся только о своём благополучии, калары - раса, '
-        'возглавлявшая остальные, а также соединявшая в себе черты остальных жителей империи. \n'
-        'В мире сохранялся мир ровно до того момента, пока на трон не взошёл молодой, амбициозный и жестокий '
-        'император ДубиумII, которому не нравилась излишняя автономия многих территорий империи.'
-        'Он начал медленно, но верно превращать страну в тоталитарную державу.\n'
-        'Жители империи, пытавшиеся восприпятствовать новым реформам, беспощадно уничтожались. '
-        'Это непонравилось беднейшим слоям рассы калларов, поднявших на бунт остальных. Началась война, '
-        'в которой сошлись две силы: милиоремы, астутианы, некоторые представители рассы калларов против '
-        'элит калларов. Обе стороны были хорошо вооружены и имели значительные людские ресурсы. \n'
-        'Война длилась 8 лет и 8 месяцев. Итогом войны стала смерть до половины всех жителей империи, а также '
-        'императора. Разбитые элиты калларов бежали и спрятались за горами, где основали своё государство - Minafer. '
-        'Милиоремы уплыли на остров, где основали страну Klalkriya. Астутианы ушли в степи, где построили множество '
-        'маленьких поселений, объединившиеся в слаборазвитое государство под названием Keliktaniya. Некогда беднейшие '
-        'слои калларов стали главной силой в мире и получили обширные территории '
-        'на материке, образовав страну Kafuron.\n'
-        'Справедливость восторжествовала или вся эта история ложь? Возглавьте государство Minafer, '
-        'и возродите империю, ''доказав всем, что история пишется победителями. \n'
-        'На данный момент в армиях ваших противников находятся от 20к до 100к человек', reply_markup=info_button)
+    await message.answer(introduction, reply_markup=info_button)
     with open('images/worldmap (1).jpg', 'rb') as img:
         await message.answer_photo(img)
     await state.set_state('1')
@@ -129,9 +98,7 @@ async def menu(message, state):
                     data['cons_per'] - (data['sold'] + data['cons'] + data['ready_cons']) / data['population'])))
         # изменение мирного населения
         data = await state.get_data()
-        await state.update_data(money_cost=(data['population'] * 10 / data['money_cost']) / (
-                data['population_b'] * 10 / data['money_cost']) - (
-                                                   data['more_money'] / (data['more_money'] + data['money'])))
+        await state.update_data(money_cost=data['min_money'] / (data['money'] + data['more_money']))
         data = await state.get_data()
         await state.update_data(money=data['money'] + (data['population'] * ((1 / data['money_cost']) / 20)) - (
             # изменение общего количества денег
@@ -193,6 +160,8 @@ async def menu(message, state):
         data = await state.get_data()
         await state.set_state('1')
         data = await state.get_data()
+        await state.update_data(min_money=(data['population'] * 5 / data['money_cost']) + (10 / data['money_cost']) * (
+                    data['sold'] + data['cons'] + data['ready_cons']))
         await status(message, state)
         data = await state.get_data()
         await state.update_data(Kafuron_f_fact=data['Kafuron_f_fact'] + 0.1)
@@ -296,9 +265,8 @@ async def print_money(message, state):
     data = await state.get_data()
     await state.update_data(more_money=int(message.text) + data['more_money'])
     data = await state.get_data()
-    await state.update_data(
-        money_cost=(data['population'] * 10 / data['money_cost']) / (data['population_b'] * 10 / data['money_cost']) - (
-                data['more_money'] / (data['more_money'] + data['money'])))
+    await state.update_data(money_cost=data['min_money'] / (data['money'] + data['more_money']))
+    data = await state.get_data()
     await state.set_state('Экономика')
     await economic(message, state)
 
@@ -446,20 +414,13 @@ async def war_c(message: types.Message, state: FSMContext):
         await message.answer('Вы вернулись на предыдущую вкладку', reply_markup=choose_action)
         await state.set_state('Меню')
 
+
 @dp.message_handler(state='Механика')
 async def mehanic(message: types.Message, state: FSMContext):
-    await message.answer('Население увеличивается при увеличнении прироста населения\n'
-                             'Прирост насления увеличивается при росте курса денег,  уменьшении стоимости топлива и '
-                             'продуктов \n Каждая фабрика по производству продуктов стоит 10000 и производит 10000 '
-                             'единиц продукции \n, Заводы про производству нефти стоят 30000 и производят 10000 единиц '
-                             'продукци в день \n каждый мирный житель потребляет 2 продуктов и 1 топливо в день '
-                             '\n Каждый военный потребляет 4 топлива и 1 продуктов в день \n'
-                             'Для развёртывания каждого солдата необходимо 1 единиц оснащения, которое можно покупать\n'
-                             'Для победы в войне необходимо иметь армию в 1.6 раза сильнее, чем у противника \n'
-                             'При захвате страны, вам достаётся 50% фабрик по производству продуктов и нефти',
-                         reply_markup=before)
+    await message.answer(mehanics, reply_markup=before)
     if message.text == 'Назад🔙':
         await message.answer('Вы вернулись на предыдущую вкладку', reply_markup=choose_action)
         await state.set_state('Меню')
+
 
 executor.start_polling(dp, skip_updates=True)
